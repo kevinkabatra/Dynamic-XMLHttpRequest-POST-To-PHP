@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2015, Kevin Kabatra <kevinkabatra@gmail.com>
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, 
+   this list of conditions and the following disclaimer. 
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--Script for XMLHttpRequest. XMLHttpRequest object is used to exchange
+            data with a server. -->
+        <script>            
+            /**
+             * 
+             * @param {type} mUrl
+             * @returns {undefined}
+             */
+            function xmlHttpRequest(postParameter, mUrl) {               
+                //Check for built in XMLHttpRequest Object
+		if(window.XMLHttpRequest) {
+                    //code for IE7+, Firefox, Chrome, Opera, Safari
+                    mXmlhttp = new XMLHttpRequest();
+                } else {
+                    //code for IE6, IE5
+                    mXmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                                
+                /**
+                 * When a request to a server is sent, we want to perform some
+                 * actions based on the response. The onreadystatechange event
+                 * is triggered every time the readyState changes. The 
+                 * readyState property holds the status of the XMLHttpRequest.
+                 * readyStates: 
+                 *      0: request not initialized 
+                 *      1: server connection established
+                 *      2: request received 
+                 *      3: processing request 
+                 *      4: request finished and response is ready
+                 * status:
+                 *      200: "OK"
+                 *      404: Page not found
+                 */
+                mXmlhttp.onreadystatechange = function() {
+                    if(mXmlhttp.readyState === 4 && mXmlhttp.status === 200) {
+                        console.log(mXmlhttp.responseText);
+                        document.getElementById('div').innerHTML = 
+                                mXmlhttp.responseText;
+                    }
+                };
+                
+                /** 
+                 * Specifies the type of request, the URL, and if the request
+                 * should be handled asynchronously or not.
+                 *     open(method,url,async)
+                 *     method: the type of request: GET or POST
+                 *     url: the location of the file on the server
+                 *     async: true (asynchronous) or false (synchronous) 
+                 */
+                mXmlhttp.open("POST", mUrl, true);
+                
+                /**
+                 * Adds HTTP headers to the request.
+                 * setRequestHeader(header,value)
+                 *     header: specifies the header name
+                 *     value: specifies the header value 
+                 */
+                mXmlhttp.setRequestHeader("Content-type",
+                        "application/x-www-form-urlencoded");
+                        
+                /**
+                 * Sends the request off to the server.
+                 *     send(string)
+                 *     string: Only used for POST requests 
+                 */
+                mXmlhttp.send(postParameter);     
+            }            
+        </script>
+        
+    </head>
+    <body>
+        <div id="div">Response text to appear here</div>
+        <script>            
+            var postParameter = '['
+                    + '\'foom\'=>\'bar\','
+                    + '\'foobar\'=>\'barfoo\','
+                    + '\'foo\'=>\'bar\','
+                    + ']';
+     
+            xmlHttpRequest("postParameter=" + postParameter,
+                    "http://yourdomain.com/process_post.php"
+        </script>
+    </body>
+</html>
